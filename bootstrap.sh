@@ -1,7 +1,6 @@
 #!/bin/bash
 sudo mkdir -p /etc/ecs  
 user=ds
-useradd --create-home --home-dir /home/$user --uid 1111 --shell /bin/bash $user
 sudo touch /etc/ecs/ecs.config
 sudo chmod -R +777 /etc/ecs
 sudo chown -R :$user /etc/ecs
