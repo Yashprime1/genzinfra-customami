@@ -8,9 +8,9 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "ami_with_ecs_agent_5"
+  ami_name      = "ami_with_ecs_agent_splunk"
   instance_type = "t2.micro"
-  region        = "us-east-1"
+  region        = "ap-south-1"
   source_ami_filter {
     filters = {
       name                = "amzn2-ami-kernel-5.10-hvm-2.0.20230628.0-x86_64-gp2"
