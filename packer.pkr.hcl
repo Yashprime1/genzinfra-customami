@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "ami_with_ecs_agent_dash"
+  ami_name      = "ami_with_ecs_agent_mongo"
   instance_type = "t2.micro"
   region        = "ap-south-1"
   source_ami_filter {
