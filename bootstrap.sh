@@ -6,7 +6,7 @@ sudo mkdir -p /mongo/data
 sudo mkdir -p /mongo/keys
 sudo chmod -R +777 /etc/ecs
 sudo chmod -R +777 /mongo/data
-sudo chmod -R +400 /mongo/keys
+sudo chmod -R +777 /mongo/keys
 sudo echo "ECS_CLUSTER=MongoEcsCluster" >> /etc/ecs/ecs.config
 sudo openssl rand -base64 756 >  /mongo/keys/replicakey
 sudo chmod 400 /mongo/keys/replicakey
