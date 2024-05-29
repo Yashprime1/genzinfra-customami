@@ -87,7 +87,8 @@ sudo chown -R bamboo:bamboo /home/bamboo/.ssh
 sudo chmod 400 /home/bamboo/.ssh/id_rsa
 
 sudo echo "fs.file-max=1000000" >> /etc/sysctl.conf
-
+ls -lrth /etc/sysctl.conf
+ls -lrth /etc/security/limits.conf
 sudo echo "bamboo           soft    nofile          900000" >> /etc/security/limits.conf
 sudo echo "bamboo           hard    nofile          900000" >> /etc/security/limits.conf
 
@@ -96,7 +97,7 @@ instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
 Key=ct-aws:cloudformation:stack-name,Value=System-Atlassian \
 Key=role,Value=bamboo-agent
-
+ls -lrth /home/bamboo
 su -c "mkdir -p /home/bamboo/bamboo-agent-home/logs" bamboo
 su -c "chown -R bamboo:users /home/bamboo/bamboo-agent-home" bamboo
 echo "Completed custom changes"
