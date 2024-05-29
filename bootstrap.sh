@@ -60,8 +60,8 @@ curl -s https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz
 # ln -s /usr/local/bin/jq /usr/bin/jq 
 
 # Download and install NodeJS.
-aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx113/bamboo-elastic-agent/node-v14-18-2/node-v14.18.2-linux-x64.tar.gz - | sudo tar -v -xz -C /opt/ 
-aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx113/bamboo-elastic-agent/node-v18-18-2/node-v18.18.2-linux-x64.tar.gz - | sudo tar -v -xz -C /opt/ 
+# aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx113/bamboo-elastic-agent/node-v14-18-2/node-v14.18.2-linux-x64.tar.gz - | sudo tar -v -xz -C /opt/ 
+# aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx113/bamboo-elastic-agent/node-v18-18-2/node-v18.18.2-linux-x64.tar.gz - | sudo tar -v -xz -C /opt/ 
 export PATH=$PATH:/opt/node-v14.18.2-linux-x64/bin
 sudo npm install --global yarn
 sudo echo 'export PATH=/opt/node-v14.18.2-linux-x64/bin:$PATH' >> /etc/profile.d/bamboo.sh
