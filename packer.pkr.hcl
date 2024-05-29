@@ -20,7 +20,7 @@ source "amazon-ebs" "ubuntu" {
     most_recent = true
     owners      = ["200193376361"]
   }
-  ssh_username = "ec2-user"
+  ssh_username = "ubuntu"
 }
 
 build {
