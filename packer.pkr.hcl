@@ -10,7 +10,7 @@ packer {
 source "amazon-ebs" "ubuntu" {
   ami_name      = "elastic_1"
   instance_type = "t2.micro"
-  region        = "ap-south-1"
+  region        = "eu-west-1"
   source_ami_filter {
     filters = {
       name                = "bamboo-elastic-ami-ubuntu-1696955431"
