@@ -1,5 +1,5 @@
 echo "Installing build dependencies"
-sudo su
+
 export JAVA_VERSION_MAJOR=8
 export JAVA_VERSION_MINOR=332
 export JAVA_VERSION_BUILD=08.1
