@@ -50,6 +50,7 @@ aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-ag
 tar -xvf jq-1.7.1.tar
 cd jq-1.7.1
 apt install -y autoconf libtool
+apt-get -y install build-essential
 autoreconf -i
 ./configure
 make
