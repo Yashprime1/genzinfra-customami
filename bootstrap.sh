@@ -46,8 +46,8 @@ apt install -y ./google-chrome-stable_current_amd64.deb
 curl -s https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz |   tar -v -xz -C /opt/
 
 # Download and install jq
-aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/jq/jq-1.7.1.tar.gz .
-tar -xvf jq-1.7.1.tar.gz
+aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/jq/jq-1.7.1.tar .
+tar -xvf jq-1.7.1.tar
 cd jq-1.7.1
 apt install -y autoconf libtool
 autoreconf -i
@@ -57,8 +57,8 @@ make install
 ln -s /usr/local/bin/jq /usr/bin/jq 
 
 # Download and install NodeJS.
-aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/node-v14-18-2/node-v14.18.2-linux-x64.tar.gz - |  tar -v -xz -C /opt/ 
-aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/node-v18-18-2/node-v18.18.2-linux-x64.tar.gz - |  tar -v -xz -C /opt/ 
+aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/node-v14-18-2/node-v14.18.2-linux-x64.tar - |  tar -v -xz -C /opt/ 
+aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/node-v18-18-2/node-v18.18.2-linux-x64.tar - |  tar -v -xz -C /opt/ 
 export PATH=$PATH:/opt/node-v14.18.2-linux-x64/bin
 npm install --global yarn
 echo 'export PATH=/opt/node-v14.18.2-linux-x64/bin:$PATH' >> /etc/profile.d/bamboo.sh
