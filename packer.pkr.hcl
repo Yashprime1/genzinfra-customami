@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "elastic_6"
+  ami_name      = "elastic_7"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
@@ -30,5 +30,6 @@ build {
   ]
   provisioner "shell" {
     script       = "bootstrap.sh"
+    execute_command = "echo 'packer' | sudo -S env {{ .Vars }} {{ .Path }}"
   }
 }
