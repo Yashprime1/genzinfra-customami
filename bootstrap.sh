@@ -89,8 +89,8 @@ sudo chmod 400 /home/bamboo/.ssh/id_rsa
 sudo echo "fs.file-max=1000000" >> /etc/sysctl.conf
 ls -lrth /etc/sysctl.conf
 ls -lrth /etc/security/limits.conf
-sudo echo "bamboo           soft    nofile          900000" >> /etc/security/limits.conf
-sudo echo "bamboo           hard    nofile          900000" >> /etc/security/limits.conf
+echo "bamboo           soft    nofile          900000" >> /etc/security/limits.conf
+echo "bamboo           hard    nofile          900000" >> /etc/security/limits.conf
 
 instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 
