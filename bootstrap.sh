@@ -4,6 +4,11 @@ export JAVA_VERSION_MAJOR=8
 export JAVA_VERSION_MINOR=332
 export JAVA_VERSION_BUILD=08.1
 
+add-apt-repository main
+add-apt-repository universe
+add-apt-repository restricted
+add-apt-repository multiverse  
+
 apt-get -o DPkg::Lock::Timeout=300 update -y &
 
 apt-get -o DPkg::Lock::Timeout=300 remove vim -y &
