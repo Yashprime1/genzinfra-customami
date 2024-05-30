@@ -82,10 +82,9 @@ echo "Add private key to bamboo home directory"
 echo "Setting maven home"
  mkdir -p /home/bamboo/.ssh
  echo "StrictHostKeyChecking no" >> /home/bamboo/.ssh/config
- aws secretsmanager get-secret-value --secret-id BambooElasticInstancePrivat-lnGWOmW8ChWA --region eu-west-1 --output text --query 'SecretString' > /home/bamboo/.ssh/id_rsa
+ # aws secretsmanager get-secret-value --secret-id BambooElasticInstancePrivat-lnGWOmW8ChWA --region eu-west-1 --output text --query 'SecretString' > /home/bamboo/.ssh/id_rsa
  chown -R bamboo:bamboo /home/bamboo/.ssh
  chmod 400 /home/bamboo/.ssh/id_rsa
-su bamboo
  echo "fs.file-max=1000000" >> /etc/sysctl.conf
 ls -lrth /etc/sysctl.conf
 ls -lrth /etc/security/limits.conf
@@ -94,10 +93,9 @@ echo "bamboo           hard    nofile          900000" >> /etc/security/limits.c
 
 instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 
-aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
+# aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
 Key=ct-aws:cloudformation:stack-name,Value=System-Atlassian \
 Key=role,Value=bamboo-agent
-ls -lrth /home/bamboo
 mkdir -p /home/bamboo/bamboo-agent-home/logs
 chown -R bamboo:users /home/bamboo/bamboo-agent-home
 echo "Completed custom changes"
