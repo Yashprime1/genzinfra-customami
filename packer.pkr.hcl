@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "elastic_10"
+  ami_name      = "elastic_11"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
@@ -21,6 +21,7 @@ source "amazon-ebs" "ubuntu" {
     owners      = ["200193376361"]
   }
   ssh_username = "ubuntu"
+  iam_instance_profile = "ec2fullaccess_role"
 }
 
 build {
