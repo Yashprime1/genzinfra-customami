@@ -8,30 +8,14 @@ autoreconf -i
 make
 make install
 ln -s /usr/local/bin/jq /usr/bin/jq 
-CONTENT="[Unit]
-Description=My Docker Container
-Requires=docker.service
-After=docker.service
-[Service]
-TimeoutStartSec=0
-Restart=always
-ExecStartPre=-/usr/bin/docker exec %n stop
-ExecStartPre=-/usr/bin/docker rm %n
-ExecStartPre=/usr/bin/docker pull prom/node-exporter
-ExecStart=/usr/bin/docker run --rm --name %n \
--v  /proc:/host/proc:ro \
--v /sys:/host/sys:ro \
- -v /:/rootfs:ro prom/node-exporter  \
--p 9100:9100 \
---stop-timeout 60 \
-prom/node-exporter  --path.procfs=\"/host/proc\"  --path.rootfs=\"/rootfs\" --path.sysfs=\"/host/sys\" --path.udev.data=\"/rootfs/run/udev/data\"  --collector.filesystem.mount-points-exclude=\"^/(sys|proc|dev|host|etc)($$|/)\" 
-ExecStop=/usr/bin/docker exec %n stop
-[Install]
-WantedBy=default.target"
-echo "$CONTENT" >> /etc/systemd/system/docker.node_exporter.service
-docker run  --name=node_exporter  prom/node-exporter
-systemctl enable docker.node_exporter
-systemctl start docker.node_exporter
+wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_exporter-1.3.1.linux-amd64.tar.gz
+tar xvfz node_exporter-1.3.1.linux-amd64.tar.gz
+sudo mv node_exporter-1.3.1.linux-amd64/node_exporter /usr/local/bin/
+rm -rf node_exporter-1.3.1.linux-amd64*
+sudo bash -c 'cat > /etc/systemd/system/node_exporter.service <<EOF\n[Unit]\nDescription=Node Exporter\nAfter=network.target\n\n[Service]\nUser=nobody\nExecStart=/usr/local/bin/node_exporter\n\n[Install]\nWantedBy=default.target\nEOF'
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter &
 
 
 
