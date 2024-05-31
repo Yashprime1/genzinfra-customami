@@ -13,17 +13,25 @@ Description=My Docker Container
 Requires=docker.service
 After=docker.service
 [Service]
+TimeoutStartSec=0
 Restart=always
-ExecStart=/usr/bin/docker start -a node-exporter
-ExecStop=/usr/bin/docker stop -t 2 node-exporter
+ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull prom/node-exporter
+ExecStart=/usr/bin/docker run --rm --name %n \
+-v  /proc:/host/proc:ro \
+-v /sys:/host/sys:ro \
+ -v /:/rootfs:ro prom/node-exporter  \
+-p 9100:9100 \
+--stop-timeout 60 \
+prom/node-exporter  --path.procfs="/host/proc"  --path.rootfs="/rootfs" --path.sysfs="/host/sys" --path.udev.data="/rootfs/run/udev/data"  --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" 
+ExecStop=/usr/bin/docker exec %n stop
 [Install]
-WantedBy=multi-user.target
-"
+WantedBy=default.target"
 echo "$CONTENT" >> /etc/systemd/system/docker.node_exporter.service
-docker run -d -p 9100:9100 --name=node_exporter -v  /proc:/host/proc:ro -v /sys:/host/sys:ro -v /:/rootfs:ro prom/node-exporter --path.procfs="/host/proc"  --path.rootfs="/rootfs" --path.sysfs="/host/sys" --path.udev.data="/rootfs/run/udev/data"  --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" 
-systemctl enable docker.node_exporter.service
-systemctl start docker.node_exporter.service
-
+docker run  --name=node_exporter 
+systemctl enable docker.node_exporter
+systemctl start docker.node_exporter
 
 
 
