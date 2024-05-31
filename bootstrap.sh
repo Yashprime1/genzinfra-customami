@@ -24,7 +24,7 @@ ExecStart=/usr/bin/docker run --rm --name %n \
  -v /:/rootfs:ro prom/node-exporter  \
 -p 9100:9100 \
 --stop-timeout 60 \
-prom/node-exporter  --path.procfs="/host/proc"  --path.rootfs="/rootfs" --path.sysfs="/host/sys" --path.udev.data="/rootfs/run/udev/data"  --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" 
+prom/node-exporter  --path.procfs=\"/host/proc\"  --path.rootfs=\"/rootfs\" --path.sysfs=\"/host/sys\" --path.udev.data=\"/rootfs/run/udev/data\"  --collector.filesystem.mount-points-exclude=\"^/(sys|proc|dev|host|etc)($$|/)\" 
 ExecStop=/usr/bin/docker exec %n stop
 [Install]
 WantedBy=default.target"
