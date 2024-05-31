@@ -8,4 +8,24 @@ autoreconf -i
 make
 make install
 ln -s /usr/local/bin/jq /usr/bin/jq 
+CONTENT="[Unit]
+Description=My Docker Container
+Requires=docker.service
+After=docker.service
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a node-exporter
+ExecStop=/usr/bin/docker stop -t 2 node-exporter
+[Install]
+WantedBy=multi-user.target
+"
+echo "$CONTENT" >> /etc/systemd/system/docker.node_exporter.service
 docker run -d -p 9100:9100 --name=node_exporter prom/node-exporter
+systemctl enable docker.node_exporter.service
+systemctl start docker.node_exporter.service
+
+
+
+
+
+
