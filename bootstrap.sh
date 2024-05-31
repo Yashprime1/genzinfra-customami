@@ -19,7 +19,7 @@ After=network.target
 
 [Service]
 User=nobody
-ExecStart=/usr/local/bin/node_exporter
+ExecStart=/usr/local/bin/node_exporter --web.listen-address=:8090
 
 [Install]
 WantedBy=multi-user.target
