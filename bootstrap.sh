@@ -20,7 +20,7 @@ ExecStop=/usr/bin/docker stop -t 2 node-exporter
 WantedBy=multi-user.target
 "
 echo "$CONTENT" >> /etc/systemd/system/docker.node_exporter.service
-docker run -d -p 9100:9100 --name=node_exporter -v  /proc:/host/proc:ro -v /sys:/host/sys:ro -v /:/rootfs:ro prom/node-exporter --path.procfs=/host/proc  --path.rootfs=/rootfs --path.sysfs=/host/sys --path.udev.data=/rootfs/run/udev/data  --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/) 
+docker run -d -p 9100:9100 --name=node_exporter -v  /proc:/host/proc:ro -v /sys:/host/sys:ro -v /:/rootfs:ro prom/node-exporter --path.procfs="/host/proc"  --path.rootfs="/rootfs" --path.sysfs="/host/sys" --path.udev.data="/rootfs/run/udev/data"  --collector.filesystem.mount-points-exclude="^/(sys|proc|dev|host|etc)($$|/)" 
 systemctl enable docker.node_exporter.service
 systemctl start docker.node_exporter.service
 
