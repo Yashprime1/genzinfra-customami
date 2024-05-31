@@ -29,7 +29,7 @@ ExecStop=/usr/bin/docker exec %n stop
 [Install]
 WantedBy=default.target"
 echo "$CONTENT" >> /etc/systemd/system/docker.node_exporter.service
-docker run  --name=node_exporter 
+docker run  --name=node_exporter  prom/node-exporter
 systemctl enable docker.node_exporter
 systemctl start docker.node_exporter
 
