@@ -12,8 +12,20 @@ wget https://github.com/prometheus/node_exporter/releases/download/v1.3.1/node_e
 tar xvfz node_exporter-1.3.1.linux-amd64.tar.gz
 sudo mv node_exporter-1.3.1.linux-amd64/node_exporter /usr/local/bin/
 rm -rf node_exporter-1.3.1.linux-amd64*
-sudo bash -c 'cat > /etc/systemd/system/node_exporter.service <<EOF\n[Unit]\nDescription=Node Exporter\nAfter=network.target\n\n[Service]\nUser=nobody\nExecStart=/usr/local/bin/node_exporter\n\n[Install]\nWantedBy=default.target\nEOF'
+sudo bash -c 'cat > /etc/systemd/system/node_exporter.service <<EOF
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=nobody
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+EOF'
 sudo systemctl daemon-reload
+sudo systemctl unmask node_exporter
 sudo systemctl enable node_exporter
 sudo systemctl start node_exporter &
 
