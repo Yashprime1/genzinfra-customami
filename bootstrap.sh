@@ -29,15 +29,15 @@ wget https://corretto.aws/downloads/resources/${JAVA_VERSION_MAJOR}.${JAVA_VERSI
 
 # 11 is for Bamboo Agent
 cd /tmp  \
-    && wget https://corretto.aws/downloads/resources/11.0.19.7.1/amazon-corretto-11.0.19.7.1-linux-x64.tar.gz >> /dev/null  \
-    &&  tar -xzf amazon-corretto-11.0.19.7.1-linux-x64.tar.gz -C /opt \
-    &&  rm -rf amazon-corretto-11.0.19.7.1-linux-x64.tar.gz
+    && wget https://corretto.aws/downloads/resources/11.0.19.7.1/amazon-corretto-11.0.19.7.1-linux-x64.tar >> /dev/null  \
+    &&  tar -xzf amazon-corretto-11.0.19.7.1-linux-x64.tar -C /opt \
+    &&  rm -rf amazon-corretto-11.0.19.7.1-linux-x64.tar
 
 
 # JDK 17 added by Jude.
-curl --silent https://corretto.aws/downloads/resources/17.0.1.12.1/amazon-corretto-17.0.1.12.1-linux-x64.tar.gz |  tar -C /opt -xzf - && mv /opt/amazon-corretto-17.0.1.12.1-linux-x64 /opt/amazon-corretto-17-linux-x64
+curl --silent https://corretto.aws/downloads/resources/17.0.1.12.1/amazon-corretto-17.0.1.12.1-linux-x64.tar |  tar -C /opt -xzf - && mv /opt/amazon-corretto-17.0.1.12.1-linux-x64 /opt/amazon-corretto-17-linux-x64
 # JDK 18 added by Yashdeep
-curl --silent https://corretto.aws/downloads/resources/18.0.2.9.1/amazon-corretto-18.0.2.9.1-linux-x64.tar.gz |  tar -C /opt -xzf - && mv /opt/amazon-corretto-18.0.2.9.1-linux-x64 /opt/amazon-corretto-18-linux-x64
+curl --silent https://corretto.aws/downloads/resources/18.0.2.9.1/amazon-corretto-18.0.2.9.1-linux-x64.tar |  tar -C /opt -xzf - && mv /opt/amazon-corretto-18.0.2.9.1-linux-x64 /opt/amazon-corretto-18-linux-x64
 #installing google chrome headless for test cafe
 curl -s "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" -o google-chrome-stable_current_amd64.deb
 apt install -y ./google-chrome-stable_current_amd64.deb
@@ -49,8 +49,7 @@ curl -s https://archive.apache.org/dist/ant/binaries/apache-ant-1.9.3-bin.tar.gz
 aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/jq/jq-1.7.1.tar .
 tar -xvf jq-1.7.1.tar
 cd jq-1.7.1
-apt install -y autoconf libtool
-apt-get -y install build-essential
+apt install -y autoconf libtool build-essential
 autoreconf -i
 ./configure
 make
@@ -80,20 +79,22 @@ echo "export MAVEN_HOME=/opt/apache-maven-3.9.4" >> /etc/profile.d/bamboo.sh
 echo "Setting maven home"
 mkdir -p /home/bamboo/.ssh
 echo "StrictHostKeyChecking no" >> /home/bamboo/.ssh/config
-# aws secretsmanager get-secret-value --secret-id BambooElasticInstancePrivat-lnGWOmW8ChWA --region eu-west-1 --output text --query 'SecretString' > /home/bamboo/.ssh/id_rsa
+aws secretsmanager get-secret-value --secret-id BambooElasticInstancePrivat-lnGWOmW8ChWA --region eu-west-1 --output text --query 'SecretString' > /home/bamboo/.ssh/id_rsa
 chown -R bamboo:bamboo /home/bamboo/.ssh
-# chmod 400 /home/bamboo/.ssh/id_rsa
+chmod 400 /home/bamboo/.ssh/id_rsa
 echo "fs.file-max=1000000" >> /etc/sysctl.conf
 ls -lrth /etc/sysctl.conf
 ls -lrth /etc/security/limits.conf
 echo "bamboo           soft    nofile          900000" >> /etc/security/limits.conf
 echo "bamboo           hard    nofile          900000" >> /etc/security/limits.conf
 
-instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-
-aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
-Key=ct-aws:cloudformation:stack-name,Value=System-Atlassian \
-Key=role,Value=bamboo-agent
 mkdir -p /home/bamboo/bamboo-agent-home/logs
 chown -R bamboo:users /home/bamboo/bamboo-agent-home
-echo "Completed custom changes"
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
+tar xvfz node_exporter-1.8.1.linux-amd64.tar.gz
+cd node_exporter-1.8.1.linux-amd64
+./node_exporter --web.listen-address=":8090" > node_exporter.log 2>&1 &
+NODE_EXPORTER_PID=$!
+echo "Node exporter started in the background with PID $NODE_EXPORTER_PID"
+disown $NODE_EXPORTER_PID
+echo "Bootstrapped elastic instance"
