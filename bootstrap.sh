@@ -26,6 +26,12 @@ sudo systemctl daemon-reload
 sudo systemctl unmask node_exporter
 sudo systemctl enable node_exporter
 sudo systemctl start node_exporter &
+metadata=(curl -s http://169.254.169.254/latest/meta-data/)
+echo "metadata- $metadata"
+instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+security_group_id=$(curl -s http://169.254.169.254/latest/meta-data/security-groups | cut -d ' ' -f 1)
+key_pair_name=$(curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | cut -d ' ' -f 3)
+echo "instance id - $instance_id  seuciry group id - $security_group_id key-pair name - $key_pair_name"
 
 
 
