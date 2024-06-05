@@ -1,3 +1,11 @@
+instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+security_group_id=$(curl -s http://169.254.169.254/latest/meta-data/security-groups | cut -d ' ' -f 1)
+key_pair_name=$(curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | cut -d ' ' -f 3)
+aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
+Key=packer-name,Value=elastic-agent-ami-builder
+Key=instance-id,Value=$instance_id \
+Key=security-group,Value=$security_group_id \ 
+Key=key-pair,Value=$security_group_id \ 
 apt-get install -y docker
 aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/jq/jq-1.7.1.tar .
 tar -xvf jq-1.7.1.tar
@@ -8,21 +16,6 @@ autoreconf -i
 make
 make install
 ln -s /usr/local/bin/jq /usr/bin/jq 
-metadata=$(curl -s http://169.254.169.254/latest/meta-data/)
-echo "metadata- $metadata"
-
-instance_id=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
-security_group_id=$(curl -s http://169.254.169.254/latest/meta-data/security-groups | cut -d ' ' -f 1)
-key_pair_name=$(curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | cut -d ' ' -f 3)
-
-echo "instance id - $instance_id  security group id - $security_group_id key-pair name - $key_pair_name"
-
-# echo "::set-output name=INSTANCE_ID::$instance_id"
-# echo "::set-output name=SECURITY_GROUP_ID::$security_group_id"
-# echo "::set-output name=KEY_PAIR_NAME::$key_pair_name"
-echo "INSTANCE_ID=your_instance_id_value"
-
-
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar xvfz node_exporter-1.8.1.linux-amd64.tar.gz
 mv node_exporter-1.8.1.linux-amd64/node_exporter /usr/local/bin/
