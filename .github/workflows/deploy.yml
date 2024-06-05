@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       instance_id: ${{ steps.step2.outputs.test }}
+      instance: ${{ steps.packer_build.outputs.INSTANCE_ID }}
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -23,8 +24,8 @@ jobs:
       - name: Packer Init
         id: packer_init
         run: packer init .
-      - name: Packer Build
-        id: packer_build
+      - id: packer_build
+        name: Packer Build
         run: packer build .
       - id: step2
         run: echo "test=world" >> "$GITHUB_OUTPUT"
@@ -42,8 +43,9 @@ jobs:
       - name: Cleanup Resources
         env:
           INSTANCE_ID: ${{ needs.build_and_deploy.outputs.instance_id }}
+          INSTANCE: ${{ needs.build_and_deploy.outputs.instance }}
         run: |
           echo "will terminate the resources here..."
-          echo "Instance ID: $INSTANCE_ID"
+          echo "Instance ID: $INSTANCE_ID $INSTANCE"
   
         
