@@ -42,7 +42,7 @@ jobs:
           instance_ids=$(aws ec2 describe-instances --region  eu-west-1 --filters "Name=tag:packer-name,Values=elastic-agent-ami-builder" "Name=instance-state-name,Values=running" --query "Reservations[*].Instances[*].InstanceId" --output text)
           for instance_id in $instance_ids; do
             echo "Processing instance ID: $instance_id"
-            values=$(aws ec2 describe-tags \ --region eu-west-1 \ --filters "Name=resource-id,Values=i-0a644bbc9bbfce7d6" \ --query "Tags[?Key=='instance-id' || Key=='security-group' || Key=='key-pair'].Value" \ --output text)
+            values=$(aws ec2 describe-tags --region eu-west-1 --filters "Name=resource-id,Values=$instance_id" --query "Tags[?Key=='instance-id' || Key=='security-group' || Key=='key-pair'].Value" --output text)
             if [ -n "$values" ]; then
               echo "Values are not empty: $values"
               aws ec2 terminate-instances --instance-ids "$instance_id" --region eu-west-1
