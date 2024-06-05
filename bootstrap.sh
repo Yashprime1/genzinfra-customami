@@ -3,10 +3,10 @@ security_group_id=$(curl -s http://169.254.169.254/latest/meta-data/security-gro
 key_pair_name=$(curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | cut -d ' ' -f 3)
 
 aws ec2 create-tags --resources $instance_id --region eu-west-1 --tags \
-  '[{"Key":"packer-name","Value":"elastic-agent-ami-builder"}, \
-    {"Key":"instance-id","Value":"'$instance_id'"}, \
-    {"Key":"security-group","Value":"'$security_group_id'"}, \
-    {"Key":"key-pair","Value":"'$key_pair_name'"}]'
+  Key=packer-name,Value=elastic-agent-ami-builder \
+  Key=instance-id,Value=$instance_id \
+  Key=security-group,Value=$security_group_id \
+  Key=key-pair,Value=$key_pair_name
 
 apt-get install -y docker
 aws s3 cp s3://system-sharedresources-ssms3bucket-ad5ymdxwx114/bamboo-elastic-agent/jq/jq-1.7.1.tar .
