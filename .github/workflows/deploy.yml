@@ -11,9 +11,6 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    outputs:
-      instance_id: ${{ steps.step2.outputs.test }}
-      instance: ${{ steps.packer_build.outputs.INSTANCE_ID }}
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -27,10 +24,6 @@ jobs:
       - id: packer_build
         name: Packer Build
         run: packer build .
-      - id: step2
-        run: echo "test=world" >> "$GITHUB_OUTPUT"
-      - name: Print GITHUB_OUTPUT
-        run: cat "$GITHUB_OUTPUT"
 
 
   cleanup_resources:
@@ -44,11 +37,7 @@ jobs:
           role-to-assume: arn:aws:iam::736548753645:role/GithubRole
           aws-region: us-east-1
       - name: Cleanup Resources
-        env:
-          INSTANCE_ID: ${{ needs.build_and_deploy.outputs.instance_id }}
-          INSTANCE: ${{ needs.build_and_deploy.outputs.instance }}
         run: |
           echo "will terminate the resources here..."
-          echo "Instance ID: $INSTANCE_ID $INSTANCE"
   
         
