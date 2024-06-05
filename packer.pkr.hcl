@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "elastic_37"
+  ami_name      = "elastic_38"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
