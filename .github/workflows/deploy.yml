@@ -46,11 +46,11 @@ jobs:
             if [ -n "$values" ]; then
               echo "Values are not empty: $values"
               aws ec2 terminate-instances --instance-ids "$instance_id" --region eu-west-1
+              key_pair_name=$(echo "$values" | awk '{print $2}')
+              aws ec2 delete-key-pair --key-name $key_pair_name --region eu-west-1
               sg_name=$(echo "$values" | awk '{print $3}')
               security_group_id=$(aws ec2 describe-security-groups --region eu-west-1 --filters "Name=group-name,Values=$sg_name" --query "SecurityGroups[0].GroupId" --output text)
               aws ec2 delete-security-group --group-id "$security_group_id" --region eu-west-1
-              key_pair_name=$(echo "$values" | awk '{print $2}')
-              aws ec2 delete-key-pair --key-name $key_pair_name --region eu-west-1
               echo "terminated"
             else
               echo "Values are empty or not found."
