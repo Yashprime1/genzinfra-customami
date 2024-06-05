@@ -16,15 +16,10 @@ security_group_id=$(curl -s http://169.254.169.254/latest/meta-data/security-gro
 key_pair_name=$(curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key | cut -d ' ' -f 3)
 
 echo "instance id - $instance_id  security group id - $security_group_id key-pair name - $key_pair_name"
+
 echo "::set-output name=INSTANCE_ID::$instance_id"
 echo "::set-output name=SECURITY_GROUP_ID::$security_group_id"
 echo "::set-output name=KEY_PAIR_NAME::$key_pair_name"
-echo "INSTANCE_ID=$instance_id" >> $GITHUB_ENV
-echo "SECURITY_GROUP_ID=$security_group_id" >> $GITHUB_ENV
-echo "KEY_PAIR_NAME=$key_pair_name" >> $GITHUB_ENV
-
-echo "printing env"
-printenv
 
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar xvfz node_exporter-1.8.1.linux-amd64.tar.gz
