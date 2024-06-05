@@ -22,32 +22,24 @@ jobs:
         run: packer init .
       - name: Packer Build
         run: packer build .
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: packer-output
-          path: .
 
   cleanup_resources:
     runs-on: ubuntu-latest
     needs: build_and_deploy
     if: always()  # Run this job always, regardless of the status of previous jobs
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: packer-output
-          path: ./packer-output
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::736548753645:role/GithubRole
           aws-region: us-east-1
       - name: Cleanup Resources
+        env:
+          INSTANCE_ID: ${{ env.INSTANCE_ID }}
+          SECURITY_GROUP_ID: ${{ env.SECURITY_GROUP_ID }}
+          KEY_PAIR_NAME: ${{ env.KEY_PAIR_NAME }}
         run: |
           echo "will terminate the resources here..."
-          instance_id=$(cat ./packer-output/instance_id)
-          security_group_id=$(cat ./packer-output/security_group_id)
-          key_pair_name=$(cat ./packer-output/key_pair_name)
-          echo "instance id - $instance_id $security_group_id $key_pair_name"
+          instance_id=$INSTANCE_ID
+          echo "instance id - $instance_id"
         
