@@ -46,6 +46,7 @@ jobs:
             if [ -n "$values" ]; then
               echo "Values are not empty: $values"
               aws ec2 terminate-instances --instance-ids "$instance_id" --region eu-west-1
+              aws ec2 wait instance-terminated --instance-ids "$instance_id" --region eu-west-1
               key_pair_name=$(echo "$values" | awk '{print $2}')
               aws ec2 delete-key-pair --key-name $key_pair_name --region eu-west-1
               sg_name=$(echo "$values" | awk '{print $3}')
