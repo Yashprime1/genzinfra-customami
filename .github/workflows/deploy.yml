@@ -11,6 +11,8 @@ permissions:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    outputs:
+      instance_id: ${{ steps.check-prs.outputs.INSTANCE_ID }}
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -26,6 +28,8 @@ jobs:
   cleanup_resources:
     runs-on: ubuntu-latest
     needs: build_and_deploy
+    env:
+      INSTANCE_ID: ${{ needs.build_and_deploy.outputs.instance_id }}
     if: always()  # Run this job always, regardless of the status of previous jobs
     steps:
       - name: Configure AWS Credentials
@@ -36,6 +40,6 @@ jobs:
       - name: Cleanup Resources
         run: |
           echo "will terminate the resources here..."
-          echo "Instance ID: ${{ needs.build_and_deploy.outputs.INSTANCE_ID }}"
+          echo "Instance ID: $INSTANCE_ID "
   
         
