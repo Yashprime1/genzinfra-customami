@@ -12,7 +12,7 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     outputs:
-      instance_id: ${{ steps.packer_build.outputs.INSTANCE_ID }}
+      instance_id: ${{ steps.step2.outputs.test }}
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -26,6 +26,8 @@ jobs:
       - name: Packer Build
         id: packer_build
         run: packer build .
+      - id: step2
+        run: echo "test=world" >> "$GITHUB_OUTPUT"
 
   cleanup_resources:
     runs-on: ubuntu-latest
