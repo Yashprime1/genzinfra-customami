@@ -23,6 +23,9 @@ echo "INSTANCE_ID=$instance_id" >> $GITHUB_ENV
 echo "SECURITY_GROUP_ID=$security_group_id" >> $GITHUB_ENV
 echo "KEY_PAIR_NAME=$key_pair_name" >> $GITHUB_ENV
 
+echo "printing env"
+printenv
+
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar xvfz node_exporter-1.8.1.linux-amd64.tar.gz
 mv node_exporter-1.8.1.linux-amd64/node_exporter /usr/local/bin/
