@@ -20,8 +20,8 @@ echo "instance id - $instance_id  security group id - $security_group_id key-pai
 # echo "::set-output name=INSTANCE_ID::$instance_id"
 # echo "::set-output name=SECURITY_GROUP_ID::$security_group_id"
 # echo "::set-output name=KEY_PAIR_NAME::$key_pair_name"
+echo "INSTANCE_ID=your_instance_id_value"
 
-export INSTANCE_ID="your_instance_id_value"
 
 wget https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
 tar xvfz node_exporter-1.8.1.linux-amd64.tar.gz
