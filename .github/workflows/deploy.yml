@@ -39,5 +39,45 @@ jobs:
       - name: Cleanup Resources
         run: |
           echo "will terminate the resources here..."
+          REGION="eu-west-1"
+          instance_ids=$(aws ec2 describe-instances --region $REGION --filters "Name=tag:packer-name,Values=elastic-agent-ami-builder" --query "Reservations[*].Instances[*].InstanceId" --output text)
+          for instance_id in $instance_ids; do
+            echo "Processing instance ID: $instance_id"
+            tags=$(aws ec2 describe-tags --region $REGION --filters "Name=resource-id,Values=$instance_id" --query "Tags[?Key=='instance_id' || Key=='security_group_id' || Key=='key_pair_name'].[Key,Value]" --output text)
+            instance_id_tag=""
+            security_group_id_tag=""
+            key_pair_name_tag=""
+            while IFS=$'\t' read -r key value; do
+            case $key in
+              instance_id)
+                instance_id_tag=$value
+                ;;
+              security_group_id)
+                security_group_id_tag=$value
+                ;;
+              key_pair_name)
+                key_pair_name_tag=$value
+                ;;
+            esac
+            done <<< "$tags"
+            if [ -n "$instance_id_tag" ]; then
+              echo "Instance ID Tag: $instance_id_tag"
+            else
+              echo "Instance ID Tag not found"
+            fi
+
+            if [ -n "$security_group_id_tag" ]; then
+              echo "Security Group ID Tag: $security_group_id_tag"
+            else
+              echo "Security Group ID Tag not found"
+            fi
+
+            if [ -n "$key_pair_name_tag" ]; then
+              echo "Key Pair Name Tag: $key_pair_name_tag"
+            else
+            echo "Key Pair Name Tag not found"
+            fi
+          done
+          echo "Script completed."
   
         
