@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
 name: Build and Deploy AMIs
 
 on:
@@ -25,4 +22,17 @@ jobs:
         run: packer init .
       - name: Packer Build
         run: packer build .
-  
+
+  cleanup_resources:
+    runs-on: ubuntu-latest
+    needs: build_and_deploy
+    if: always()  # Run this job always, regardless of the status of previous jobs
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::736548753645:role/GithubRole
+          aws-region: us-east-1
+      - name: Cleanup Resources
+        run: |
+          echo "will terminate the resources here..."
