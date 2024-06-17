@@ -8,20 +8,19 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "elastic_45"
+  ami_name      = "ami_with_ecs_agent_mongo_with_replicakey_perm"
   instance_type = "t2.micro"
-  region        = "eu-west-1"
+  region        = "ap-south-1"
   source_ami_filter {
     filters = {
-      name                = "bamboo-elastic-ami-ubuntu-1696955431"
+      name                = "amzn2-ami-kernel-5.10-hvm-2.0.20230628.0-x86_64-gp2"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["200193376361"]
+    owners      = ["137112412989"]
   }
-  ssh_username = "ubuntu"
-  iam_instance_profile = "ec2fullaccess_role"
+  ssh_username = "ec2-user"
 }
 
 build {
