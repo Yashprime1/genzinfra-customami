@@ -8,8 +8,8 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "ami_with_ecs_agent_mongo_cluster"
-  instance_type = "t2.micro"
+  ami_name      = "ami_with_ecs_agent_bamboo_cluster"
+  instance_type = "t2.2xlarge"
   region        = "ap-south-1"
   source_ami_filter {
     filters = {
