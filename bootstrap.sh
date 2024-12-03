@@ -80,7 +80,7 @@ function setup_bamboo_data_dir(){
 sudo echo "Eu-Bamboo" > /etc/cfn_stackname
 if ! id -u bamboo &> /dev/null
 then
-    log_info "User bamboo not found. Will create"
+    log_info "User bamboo not found. Will be created"
     sudo useradd --create-home --home /home/bamboo --uid 1000 --user-group --shell /bin/bash bamboo
 fi
 
